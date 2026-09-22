@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# AGENTS
+.devin
+.claude
+.cursor
+/src/generated/prisma

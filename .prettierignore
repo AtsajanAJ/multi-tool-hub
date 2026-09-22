@@ -1,0 +1,10 @@
+.next
+node_modules
+bun.lock
+out
+build
+coverage
+.cursor
+.devin
+.agents
+.claude
