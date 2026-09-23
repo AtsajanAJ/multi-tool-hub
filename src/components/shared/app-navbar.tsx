@@ -8,12 +8,14 @@ import { signOutAction } from "@/lib/actions/sign-out";
 type AppNavbarProps = {
   userName?: string | null;
   userEmail?: string | null;
+  showMenuButton?: boolean;
   onMenuClick: () => void;
 };
 
 export function AppNavbar({
   userName,
   userEmail,
+  showMenuButton = false,
   onMenuClick,
 }: AppNavbarProps) {
   const label = userName || userEmail || "Signed in";
@@ -25,7 +27,7 @@ export function AppNavbar({
           type="button"
           variant="ghost"
           size="icon"
-          className="md:hidden"
+          className={showMenuButton ? undefined : "md:hidden"}
           onClick={onMenuClick}
           aria-label="Open menu"
         >

@@ -27,6 +27,10 @@ export async function POST(request: Request) {
     const qrCode = await generateQr({
       url: parsed.data.url,
       userId,
+      size: parsed.data.size,
+      color: parsed.data.color,
+      ecc: parsed.data.ecc,
+      margin: parsed.data.margin,
     });
 
     return NextResponse.json(qrCode, { status: 201 });

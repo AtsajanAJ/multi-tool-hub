@@ -7,6 +7,7 @@ export const modules = [
     enabled: true,
     group: "featured",
     icon: "qr",
+    sidebarHint: "URL / generator",
   },
   {
     href: "/incidents",
@@ -35,6 +36,7 @@ export const modules = [
     group: "additional",
     icon: "api",
     footnote: "REST / GraphQL",
+    shortLabel: "API Tester",
   },
   {
     href: "/hash",
@@ -45,6 +47,7 @@ export const modules = [
     group: "additional",
     icon: "hash",
     footnote: "SHA-256 · HMAC",
+    shortLabel: "Hash & Encrypt",
   },
 ] as const;
 

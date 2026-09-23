@@ -10,10 +10,31 @@ export class QrServiceError extends Error {
   }
 }
 
-function buildQrImageUrl(url: string) {
+type QrImageOptions = {
+  size?: number;
+  color?: string;
+  ecc?: "L" | "M" | "Q" | "H";
+  margin?: number;
+};
+
+function buildQrImageUrl(url: string, options: QrImageOptions = {}) {
+  const size = options.size ?? 300;
   const imageUrl = new URL(QR_API_BASE);
-  imageUrl.searchParams.set("size", "300x300");
+  imageUrl.searchParams.set("size", `${size}x${size}`);
   imageUrl.searchParams.set("data", url);
+  imageUrl.searchParams.set("format", "png");
+  imageUrl.searchParams.set("bgcolor", "ffffff");
+
+  if (options.color) {
+    imageUrl.searchParams.set("color", options.color);
+  }
+  if (options.ecc) {
+    imageUrl.searchParams.set("ecc", options.ecc);
+  }
+  if (options.margin !== undefined) {
+    imageUrl.searchParams.set("margin", String(options.margin));
+  }
+
   return imageUrl.toString();
 }
 
@@ -41,11 +62,19 @@ async function assertQrApiAvailable(imageUrl: string) {
 export async function generateQr({
   url,
   userId,
+  size,
+  color,
+  ecc,
+  margin,
 }: {
   url: string;
   userId: string;
+  size?: number;
+  color?: string;
+  ecc?: "L" | "M" | "Q" | "H";
+  margin?: number;
 }) {
-  const imageUrl = buildQrImageUrl(url);
+  const imageUrl = buildQrImageUrl(url, { size, color, ecc, margin });
   await assertQrApiAvailable(imageUrl);
 
   return prisma.qrCode.create({

@@ -10,14 +10,6 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import type { QrCodeRecord } from "@/lib/modules/qr/types";
 import { isHttpUrl, isTrustedQrImageUrl } from "@/lib/url";
 
@@ -48,17 +40,17 @@ type QrHistoryTableProps = {
 export function QrHistoryTable({ items, loading }: QrHistoryTableProps) {
   if (loading) {
     return (
-      <div className="flex flex-col gap-2">
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-10 w-full" />
+      <div className="flex flex-col gap-3">
+        <Skeleton className="h-14 w-full rounded-xl bg-background" />
+        <Skeleton className="h-14 w-full rounded-xl bg-background" />
+        <Skeleton className="h-14 w-full rounded-xl bg-background" />
       </div>
     );
   }
 
   if (items.length === 0) {
     return (
-      <Empty className="border border-dashed border-border">
+      <Empty className="border border-dashed border-border bg-background/60">
         <EmptyHeader>
           <EmptyMedia variant="icon">
             <QrCode />
@@ -73,50 +65,66 @@ export function QrHistoryTable({ items, loading }: QrHistoryTableProps) {
   }
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>URL</TableHead>
-          <TableHead className="hidden sm:table-cell">Created</TableHead>
-          <TableHead className="text-right">Download</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
+    <div className="flex flex-col gap-2">
+      <div className="hidden px-2 text-[11px] font-medium tracking-[0.14em] text-muted-foreground uppercase sm:grid sm:grid-cols-[5.5rem_minmax(0,1fr)_9rem_5rem_2.75rem] sm:gap-3">
+        <span>Key</span>
+        <span>Destination</span>
+        <span>Created</span>
+        <span>Status</span>
+        <span className="text-right">Action</span>
+      </div>
+      <ul className="flex flex-col gap-2">
         {items.map((item) => (
-          <TableRow key={item.id}>
-            <TableCell className="max-w-[10rem] sm:max-w-xs">
+          <li
+            key={item.id}
+            className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-xl bg-background px-3 py-3 sm:grid-cols-[5.5rem_minmax(0,1fr)_9rem_5rem_2.75rem] sm:gap-3"
+          >
+            <span className="flex items-center gap-2">
+              <span className="flex size-8 items-center justify-center rounded-lg bg-[#efe9de] text-[#8f4a32]">
+                <QrCode className="size-3.5" />
+              </span>
+              <span className="hidden font-mono text-[11px] text-muted-foreground sm:inline">
+                {item.id.slice(-6)}
+              </span>
+            </span>
+            <div className="min-w-0">
               {isHttpUrl(item.url) ? (
                 <a
                   href={item.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block truncate text-primary underline-offset-4 hover:underline"
+                  className="block truncate text-sm text-foreground underline-offset-4 hover:underline"
                 >
                   {item.url}
                 </a>
               ) : (
-                <span className="block truncate">{item.url}</span>
+                <span className="block truncate text-sm">{item.url}</span>
               )}
-            </TableCell>
-            <TableCell className="hidden sm:table-cell">
+              <p className="truncate text-[11px] text-muted-foreground sm:hidden">
+                {new Date(item.createdAt).toLocaleString()}
+              </p>
+            </div>
+            <span className="hidden truncate text-sm text-muted-foreground sm:block">
               {new Date(item.createdAt).toLocaleString()}
-            </TableCell>
-            <TableCell className="text-right">
+            </span>
+            <span className="hidden text-sm text-[#5db872] sm:block">Ready</span>
+            <div className="flex justify-end">
               <Button
                 type="button"
-                variant="outline"
-                size="sm"
+                variant="ghost"
+                size="icon"
+                className="size-10"
+                aria-label={`Download QR for ${item.url}`}
                 onClick={() =>
                   void downloadQrImage(item.imageUrl, `qr-${item.id}.png`)
                 }
               >
-                <Download data-icon="inline-start" />
-                <span className="hidden sm:inline">Download</span>
+                <Download />
               </Button>
-            </TableCell>
-          </TableRow>
+            </div>
+          </li>
         ))}
-      </TableBody>
-    </Table>
+      </ul>
+    </div>
   );
 }

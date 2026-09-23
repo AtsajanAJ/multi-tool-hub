@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AppNavbar } from "@/components/shared/app-navbar";
 import { AppSidebar } from "@/components/shared/app-sidebar";
 
@@ -10,18 +10,39 @@ type DashboardShellProps = {
   children: React.ReactNode;
 };
 
+const STORAGE_KEY = "sidebar-hidden";
+
 export function DashboardShell({
   userName,
   userEmail,
   children,
 }: DashboardShellProps) {
-  const [open, setOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
+
+  useEffect(() => {
+    setHidden(localStorage.getItem(STORAGE_KEY) === "true");
+  }, []);
+
+  function hideSidebar() {
+    setHidden(true);
+    setMobileOpen(false);
+    localStorage.setItem(STORAGE_KEY, "true");
+  }
+
+  function showSidebar() {
+    setHidden(false);
+    setMobileOpen(true);
+    localStorage.setItem(STORAGE_KEY, "false");
+  }
 
   return (
     <div className="flex min-h-screen bg-background">
       <AppSidebar
-        open={open}
-        onClose={() => setOpen(false)}
+        mobileOpen={mobileOpen}
+        hidden={hidden}
+        onClose={() => setMobileOpen(false)}
+        onHide={hideSidebar}
         userName={userName}
         userEmail={userEmail}
       />
@@ -29,7 +50,8 @@ export function DashboardShell({
         <AppNavbar
           userName={userName}
           userEmail={userEmail}
-          onMenuClick={() => setOpen(true)}
+          showMenuButton={hidden}
+          onMenuClick={showSidebar}
         />
         <main className="mx-auto w-full max-w-[1200px] flex-1 px-4 py-8 md:px-8">
           {children}
