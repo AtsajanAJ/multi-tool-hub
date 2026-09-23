@@ -26,9 +26,9 @@ A modular monolith web app that bundles multiple internal tools/modules into one
 - [x] Install and init shadcn/ui
 - [x] Create Git repo, set up `.gitignore` (including `.env*`)
 - [x] Create Neon Postgres database (dev + prod branch)
-- [ ] Install Prisma, connect to Neon connection string via `.env`
-- [ ] Set up Vercel project, link Git repo, configure environment variables on Vercel
-- [ ] Deploy a "Hello World" page to Vercel to verify the pipeline works
+- [x] Install Prisma, connect to Neon connection string via `.env`
+- [x] Set up Vercel project, link Git repo, configure environment variables on Vercel
+- [x] Deploy a "Hello World" page to Vercel to verify the pipeline works
 
 **Definition of done:** Opening the Vercel URL shows a blank page built successfully from the repo.
 
