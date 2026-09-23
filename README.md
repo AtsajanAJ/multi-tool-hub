@@ -59,6 +59,8 @@ Open [http://localhost:3000](http://localhost:3000) → sign in → **QR Codes**
 | `bun run lint` | ESLint |
 | `bun run format` | Prettier |
 | `bun run db:migrate` | Apply migrations (`prisma migrate deploy`) |
+| `bun run db:status` | Check migration status (dev) |
+| `bun run db:status:prod` | Check migration status (production) |
 | `bun run db:studio` | Prisma Studio |
 | `bun run db:seed` | Create the local admin user |
 

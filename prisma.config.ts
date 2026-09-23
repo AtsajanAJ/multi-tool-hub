@@ -1,11 +1,8 @@
-import { config } from "dotenv";
 import { defineConfig } from "prisma/config";
+import { datasourceHost, loadAppEnv } from "./src/lib/load-env";
 
-if (!process.env.DIRECT_URL) {
-  config({
-    path: process.env.APP_ENV === "production" ? ".env.production" : ".env",
-  });
-}
+const envFile = loadAppEnv();
+console.info(`Prisma env: ${envFile} → ${datasourceHost()}`);
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
