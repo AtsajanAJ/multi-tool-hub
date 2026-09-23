@@ -1,12 +1,8 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import { z } from "zod";
 import { prisma } from "@/lib/db";
-const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(1),
-});
+import { loginSchema } from "@/lib/validations/auth";
 export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" }, // Credentials ต้องใช้ JWT
   pages: {

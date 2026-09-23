@@ -45,7 +45,9 @@ export default async function LoginPage({
     <main className="flex min-h-screen items-center justify-center p-4">
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle>Sign in</CardTitle>
+          <CardTitle className="font-heading text-3xl tracking-tight">
+            Sign in
+          </CardTitle>
           <CardDescription>Multi-Tool Hub</CardDescription>
         </CardHeader>
         <CardContent>
