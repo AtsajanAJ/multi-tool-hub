@@ -32,20 +32,19 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
   callbacks: {
     jwt({ token, user }) {
-        if (user) token.sub = user.id;
-        return {
-            ...token,
-            id: user?.id,
-        };
+      if (user?.id) {
+        token.sub = user.id;
+      }
+      return token;
     },
     session({ session, token }) {
-        return {
-            ...session,
-            user: {
-                ...session.user,
-                id: token.id as string,
-            },
-        };
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.sub ?? "",
+        },
+      };
     },
     authorized({ auth, request }) {
         const isLoggedIn = !!auth?.user;
