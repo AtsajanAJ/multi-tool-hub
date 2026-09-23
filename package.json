@@ -11,8 +11,11 @@
     "format:check": "prettier --check .",
     "postinstall": "prisma generate",
     "db:migrate": "prisma migrate deploy",
+    "db:migrate:prod": "bun --env-file=.env.production x prisma migrate deploy",
     "db:studio": "prisma studio",
-    "db:seed": "bun scripts/seed-admin.ts"
+    "db:studio:prod": "bun --env-file=.env.production x prisma studio",
+    "db:seed": "bun scripts/seed-admin.ts",
+    "db:seed:prod": "bun --env-file=.env.production scripts/seed-admin.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

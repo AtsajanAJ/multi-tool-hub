@@ -60,6 +60,7 @@ Open [http://localhost:3000](http://localhost:3000) → sign in → **QR Codes**
 | `bun run format` | Prettier |
 | `bun run db:migrate` | Apply migrations (`prisma migrate deploy`) |
 | `bun run db:studio` | Prisma Studio |
+| `bun run db:seed` | Create the local admin user |
 
 ## Project layout
 
@@ -75,6 +76,29 @@ src/components/qr       QR UI
 
 API routes stay thin: validate with Zod, call `lib/modules/<module>/service.ts`, return JSON.
 
+## Dev vs production env
+
+| File | Used for | Git |
+|---|---|---|
+| `.env` | Local / Neon **dev** branch | ignored |
+| `.env.production` | Neon **production** branch (migrate / seed) | ignored |
+| `.env.example` / `.env.production.example` | Templates only | committed |
+
+```bash
+# first time
+copy .env.production.example .env.production
+```
+
+Put production Neon URLs in `.env.production`, then:
+
+```bash
+bun run db:migrate:prod
+bun run db:seed:prod
+```
+
+Local `bun run dev` and `bun run db:migrate` still use `.env` (dev).
+
 ## Deploy (Vercel)
 
-Set the same env vars on Vercel. Use the Neon **production** branch for `DATABASE_URL` / `DIRECT_URL`, and set `AUTH_URL` to the production URL.
+Copy the **same** production values onto Vercel (Production environment): `DATABASE_URL`, `DIRECT_URL`, `AUTH_SECRET`, `AUTH_URL`.
+

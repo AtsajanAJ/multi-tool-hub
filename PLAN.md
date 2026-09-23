@@ -101,7 +101,7 @@ A modular monolith web app that bundles multiple internal tools/modules into one
 
 ## Phase 4 — Deployment
 
-- [ ] Configure all environment variables on Vercel (DATABASE_URL, NEXTAUTH_SECRET, NEXTAUTH_URL)
+- [ ] Configure all environment variables on Vercel (`DATABASE_URL`, `DIRECT_URL`, `AUTH_SECRET`, `AUTH_URL`)
 - [ ] Deploy to production
 - [ ] Full end-to-end test on production
 

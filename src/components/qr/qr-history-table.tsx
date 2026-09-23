@@ -107,7 +107,7 @@ export function QrHistoryTable({ items, loading }: QrHistoryTableProps) {
                 variant="outline"
                 size="sm"
                 onClick={() =>
-                  downloadQrImage(item.imageUrl, `qr-${item.id}.png`)
+                  void downloadQrImage(item.imageUrl, `qr-${item.id}.png`)
                 }
               >
                 <Download data-icon="inline-start" />
