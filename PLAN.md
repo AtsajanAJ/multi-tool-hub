@@ -12,7 +12,7 @@ A modular monolith web app that bundles multiple internal tools/modules into one
 - Designed so new modules can be added later without refactoring the core structure
 - Internal company tool — requires login to use
 
-**Stack:** Next.js (JavaScript) + Neon Postgres + Prisma + Tailwind CSS + shadcn/ui + NextAuth + Zod + Vercel
+**Stack:** Next.js (TypeScript) + Neon Postgres + Prisma + Tailwind CSS + shadcn/ui + NextAuth + Zod + Vercel
 
 ---
 
@@ -38,13 +38,13 @@ A modular monolith web app that bundles multiple internal tools/modules into one
 
 ## Phase 1 — Core Infrastructure (shared across all modules)
 
-- [ ] Design the modular folder structure (see `agent.md` for details)
-- [ ] Create base Prisma schema: `User`, `Session`, `Account` (for NextAuth)
-- [ ] Set up NextAuth (Credentials provider as the default)
-- [ ] Build Login / Logout pages
-- [ ] Add middleware to protect pages that require login
-- [ ] Set up shared Zod validation utils
-- [ ] Build the main layout (Navbar, Sidebar for switching between future modules)
+- [x] Design the modular folder structure (see `agent.md` for details)
+- [x] Create base Prisma schema: `User`, `Session`, `Account` (for NextAuth)
+- [x] Set up NextAuth (Credentials provider as the default)
+- [x] Build Login / Logout pages
+- [x] Add middleware to protect pages that require login
+- [x] Set up shared Zod validation utils
+- [x] Build the main layout (Navbar, Sidebar for switching between future modules)
 
 **Definition of done:** User can log in and see an empty dashboard with a sidebar reserved for modules.
 
@@ -58,29 +58,29 @@ A modular monolith web app that bundles multiple internal tools/modules into one
 
 ### 2.1 Database
 
-- [ ] Add Prisma model `QrCode`:
+- [x] Add Prisma model `QrCode`:
   - `id`, `url` (input), `imageUrl` (or cached image), `createdBy` (userId), `createdAt`
-- [ ] Run migration (`prisma migrate dev`)
+- [x] Run migration (`prisma migrate dev`)
 
 
 
 ### 2.2 Backend (API Route)
 
-- [ ] Create `POST /api/qr/generate`
+- [x] Create `POST /api/qr/generate`
   - Accept `url` in the request body, validate with Zod (must be a valid URL)
   - Call `https://api.qrserver.com/v1/create-qr-code/?data=...`
   - Save the record to the DB (`QrCode` table)
   - Return the generated QR image URL
-- [ ] Create `GET /api/qr/history` — fetch QR generation history for the logged-in user
+- [x] Create `GET /api/qr/history` — fetch QR generation history for the logged-in user
 
 
 
 ### 2.3 Frontend
 
-- [ ] `/qr` page — URL input form + Generate button
-- [ ] Display the generated QR image + a download button
-- [ ] Display a history table of previously generated QR codes (shadcn/ui Table)
-- [ ] Loading state / error state (invalid URL, API downtime, etc.)
+- [x] `/qr` page — URL input form + Generate button
+- [x] Display the generated QR image + a download button
+- [x] Display a history table of previously generated QR codes (shadcn/ui Table)
+- [x] Loading state / error state (invalid URL, API downtime, etc.)
 
 **Definition of done:** Entering a URL produces a real QR code; history is saved and displayed correctly.
 
@@ -90,10 +90,10 @@ A modular monolith web app that bundles multiple internal tools/modules into one
 
 ## Phase 3 — Polish & QA
 
-- [ ] Verify responsive design on mobile
-- [ ] Handle all edge cases (empty URL, malformed URL, free-API downtime/rate limit)
-- [ ] Write a README with local dev setup instructions
-- [ ] Basic security review (validate all inputs, prevent XSS from user-entered URLs)
+- [x] Verify responsive design on mobile
+- [x] Handle all edge cases (empty URL, malformed URL, free-API downtime/rate limit)
+- [x] Write a README with local dev setup instructions
+- [x] Basic security review (validate all inputs, prevent XSS from user-entered URLs)
 
 ---
 

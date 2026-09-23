@@ -41,7 +41,8 @@
 
 > Keep adding to this section every time a recurring issue comes up during development.
 
-- (No entries yet — add real issues here as they're discovered during development)
+- Auth.js JWT session often has `user.email` but an empty `user.id`. Resolve the user id from email (`requireUserId`) instead of trusting `session.user.id` alone.
+- Postman 401 on `/api/*` usually means the `authjs.session-token` cookie was not sent. Use `localhost`, not `127.0.0.1`.
 
 ---
 

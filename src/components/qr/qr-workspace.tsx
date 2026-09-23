@@ -21,6 +21,7 @@ import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { generateQrSchema } from "@/lib/modules/qr/validation";
 import type { QrCodeRecord } from "@/lib/modules/qr/types";
+import { isTrustedQrImageUrl } from "@/lib/url";
 import {
   downloadQrImage,
   QrHistoryTable,
@@ -63,9 +64,15 @@ export function QrWorkspace() {
     event.preventDefault();
     setError(null);
 
-    const parsed = generateQrSchema.safeParse({ url: url.trim() });
+    const trimmed = url.trim();
+    if (!trimmed) {
+      setUrlError("Enter a URL");
+      return;
+    }
+
+    const parsed = generateQrSchema.safeParse({ url: trimmed });
     if (!parsed.success) {
-      setUrlError("Enter a valid URL, including https://");
+      setUrlError(parsed.error.issues[0]?.message ?? "Enter a valid URL, including https://");
       return;
     }
 
@@ -81,6 +88,9 @@ export function QrWorkspace() {
       const data = await response.json();
 
       if (!response.ok) {
+        if (response.status === 429) {
+          throw new Error("Too many requests. Wait a minute and try again.");
+        }
         const message =
           typeof data.error === "string"
             ? data.error
@@ -105,7 +115,9 @@ export function QrWorkspace() {
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-2">
-        <h1 className="font-heading text-4xl tracking-tight">QR Codes</h1>
+        <h1 className="font-heading text-3xl tracking-tight sm:text-4xl">
+          QR Codes
+        </h1>
         <p className="text-base text-muted-foreground">
           Turn a URL into a QR code and keep a history of what you generate.
         </p>
@@ -162,13 +174,19 @@ export function QrWorkspace() {
           <CardContent>
             {latest ? (
               <div className="flex flex-col items-start gap-4">
-                <img
-                  src={latest.imageUrl}
-                  alt={`QR code for ${latest.url}`}
-                  width={300}
-                  height={300}
-                  className="rounded-lg bg-background ring-1 ring-border"
-                />
+                {isTrustedQrImageUrl(latest.imageUrl) ? (
+                  <img
+                    src={latest.imageUrl}
+                    alt={`QR code for ${latest.url}`}
+                    width={300}
+                    height={300}
+                    className="h-auto w-full max-w-[300px] rounded-lg bg-background ring-1 ring-border"
+                  />
+                ) : (
+                  <p className="text-sm text-destructive">
+                    QR image URL is not trusted.
+                  </p>
+                )}
                 <p className="max-w-full truncate text-sm text-muted-foreground">
                   {latest.url}
                 </p>

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { generateQr, QrServiceError } from "@/lib/modules/qr/service";
 import { generateQrSchema } from "@/lib/modules/qr/validation";
+import { checkRateLimit } from "@/lib/rate-limit";
 import { requireUserId } from "@/lib/require-user";
 import { parseJsonBody } from "@/lib/validations/http";
 
@@ -8,6 +9,13 @@ export async function POST(request: Request) {
   const userId = await requireUserId();
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  if (!checkRateLimit(`qr-generate:${userId}`, { windowMs: 60_000, max: 10 })) {
+    return NextResponse.json(
+      { error: "Too many requests. Wait a minute and try again." },
+      { status: 429 },
+    );
   }
 
   const parsed = await parseJsonBody(generateQrSchema, request);

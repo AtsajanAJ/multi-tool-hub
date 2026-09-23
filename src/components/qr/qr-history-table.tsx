@@ -19,17 +19,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { QrCodeRecord } from "@/lib/modules/qr/types";
-
-function isHttpUrl(value: string) {
-  try {
-    const parsed = new URL(value);
-    return parsed.protocol === "http:" || parsed.protocol === "https:";
-  } catch {
-    return false;
-  }
-}
+import { isHttpUrl, isTrustedQrImageUrl } from "@/lib/url";
 
 export async function downloadQrImage(imageUrl: string, filename: string) {
+  if (!isTrustedQrImageUrl(imageUrl)) {
+    throw new Error("QR image URL is not trusted.");
+  }
+
   const response = await fetch(imageUrl);
   if (!response.ok) {
     throw new Error("Could not download QR image.");
@@ -81,28 +77,28 @@ export function QrHistoryTable({ items, loading }: QrHistoryTableProps) {
       <TableHeader>
         <TableRow>
           <TableHead>URL</TableHead>
-          <TableHead>Created</TableHead>
+          <TableHead className="hidden sm:table-cell">Created</TableHead>
           <TableHead className="text-right">Download</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {items.map((item) => (
           <TableRow key={item.id}>
-            <TableCell className="max-w-xs">
+            <TableCell className="max-w-[10rem] sm:max-w-xs">
               {isHttpUrl(item.url) ? (
                 <a
                   href={item.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="truncate text-primary underline-offset-4 hover:underline"
+                  className="block truncate text-primary underline-offset-4 hover:underline"
                 >
                   {item.url}
                 </a>
               ) : (
-                <span className="truncate">{item.url}</span>
+                <span className="block truncate">{item.url}</span>
               )}
             </TableCell>
-            <TableCell>
+            <TableCell className="hidden sm:table-cell">
               {new Date(item.createdAt).toLocaleString()}
             </TableCell>
             <TableCell className="text-right">
@@ -115,7 +111,7 @@ export function QrHistoryTable({ items, loading }: QrHistoryTableProps) {
                 }
               >
                 <Download data-icon="inline-start" />
-                Download
+                <span className="hidden sm:inline">Download</span>
               </Button>
             </TableCell>
           </TableRow>

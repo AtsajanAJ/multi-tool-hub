@@ -35,11 +35,13 @@ export function AppNavbar({
         </p>
       </div>
       <div className="flex items-center gap-3">
-        <p className="max-w-48 truncate text-sm text-foreground">{label}</p>
+        <p className="max-w-24 truncate text-sm text-foreground sm:max-w-48">
+          {label}
+        </p>
         <form action={signOutAction}>
           <Button type="submit" variant="outline" size="sm">
             <LogOut data-icon="inline-start" />
-            Sign out
+            <span className="hidden sm:inline">Sign out</span>
           </Button>
         </form>
       </div>
